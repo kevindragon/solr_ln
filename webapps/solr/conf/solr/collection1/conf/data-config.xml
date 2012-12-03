@@ -1,0 +1,11 @@
+<dataConfig>
+  <dataSource name="mysql" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost/newlaw" user="root" password="mysql5" batchSize="-1" />
+  <document name="content">
+    <entity name="tax" dataSource="mysql" pk="taxid"
+            query="select taxid, title as t2, title from tax where taxid > 105">
+      <field column="taxid" name="id" />
+      <field column="title" name="title" />
+      <field column="t2" name="gaoskIK" />
+    </entity>
+  </document>
+</dataConfig>
