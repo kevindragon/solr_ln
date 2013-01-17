@@ -1,11 +1,38 @@
 <dataConfig>
-  <dataSource name="mysql" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost/newlaw" user="root" password="mysql5" batchSize="-1" />
+  <dataSource name="mysql" 
+              driver="com.mysql.jdbc.Driver" 
+              url="jdbc:mysql://10.123.4.212/newlaw" 
+              user="prcinvestment" 
+              password="lu007bond008#!" 
+              batchSize="-1" />
   <document name="content">
     <entity name="tax" dataSource="mysql" pk="taxid"
-            query="select taxid, title as t2, title from tax where taxid > 105">
+            query="select taxid, title, UNIX_TIMESTAMP(`date`) as issue_time, 
+                   power_level, isEnglish, countryed_1, countryed_2, origin_id, provider_id 
+            	   from tax 
+            	   where display=1 AND isEnglish='N' 
+                   order by taxid">
       <field column="taxid" name="id" />
-      <field column="title" name="title" />
-      <field column="t2" name="gaoskIK" />
+      <field column="taxid" name="tid" />
+      <!--<field column="title" name="title" />-->
+      <field column="title" name="title_ik" />
+      <field column="issue_time" name="issue_time" />
+      <field column="power_level" name="power_level" />
+      <field column="isEnglish" name="isEnglish" />
+      <field column="countryed_1" name="countryed_1" />
+      <field column="countryed_2" name="countryed_2" />
+      <entity name="refer_sql" 
+              query="SELECT count(*) as refer_count 
+                     FROM `cross_ref_link` 
+                     WHERE `des_provider_id`=${tax.provider_id} and `des_origin_id`='${tax.origin_id}'">
+      	<field column="refer_count" name="refer_count" />
+      </entity>
+      <entity name="content_sql" 
+              query="select content from tax_content where taxid=${tax.taxid}" 
+              transformer="HTMLStripTransformer">
+      	<!--<field column="content" name="content" stripHTML="true" />-->
+      	<field column="content" name="content_ik" stripHTML="true" />
+      </entity>
     </entity>
   </document>
 </dataConfig>
